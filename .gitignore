@@ -1,0 +1,4 @@
+/.shake/
+/build/
+/node_modules/
+/run-tests

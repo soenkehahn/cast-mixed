@@ -1,0 +1,6 @@
+- implement pending tests
+- replace build system
+- put all babel plugins into .babelrc
+- remove lodash dependency
+- upload to npm
+- set up CI
