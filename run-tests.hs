@@ -20,5 +20,5 @@ main = shakeArgs shakeOptions $ do
   "build//*.js" %> \out -> do
     let sourceFile = dropDirectory1 out
     need [sourceFile]
-    unit $ cmd "babel --plugins transform-es2015-modules-commonjs --out-dir build"
+    unit $ cmd "babel --out-dir build"
       sourceFile

@@ -91,6 +91,8 @@ describe('sample-types', () => {
       it('keeps additional fields in the object')
 
       it('allows refinement of object types in multiple steps')
+
+      it('returns an object that is referentially equal to the input')
     })
 
     it('classes')
