@@ -1,5 +1,4 @@
 - implement pending tests
-- replace build system
 - remove lodash dependency
 - upload to npm
 - set up CI

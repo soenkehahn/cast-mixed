@@ -1,6 +1,9 @@
-test: run-tests
-	./run-tests
+test: flow.phony build/tests/sample-types_test.js build/src/sample-types.js
+	mocha build/tests/sample-types_test.js --color
 
-run-tests: run-tests.hs
-	./run-tests.hs --no-build
-	stack exec --resolver lts-8.9 -- ghc -outputdir build run-tests.hs
+build/%.js: %.js
+	echo building $<
+	babel --out-dir build $<
+
+flow.phony:
+	flow
