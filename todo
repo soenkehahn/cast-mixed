@@ -1,6 +1,5 @@
 - implement pending tests
 - replace build system
-- refactor to use assert and unsafe casts
 - remove lodash dependency
 - upload to npm
 - set up CI

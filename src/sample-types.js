@@ -3,26 +3,39 @@
 import _ from 'lodash'
 
 export function cast<A>(sample: A, input: mixed): ?A {
+  if (hasSampleType(sample, input)) {
+    return unsafeCast(input)
+  } else {
+    return null
+  }
+}
+
+function unsafeCast<A, B>(a: A): B {
+  const r: any = a
+  return r
+}
+
+function hasSampleType<A>(sample: A, input: mixed): bool {
   switch (typeof(sample)) {
     case 'number':
       if (typeof(input) === 'number') {
-        return unsafeCast(input)
+        return true
       } else {
-        return null
+        return false
       }
     case 'string':
       if (typeof(input) === 'string') {
-        return unsafeCast(input)
+        return true
       } else {
-        return null
+        return false
       }
     case 'object':
       if (sample === null) {
         throw new Error('invalid sample: null')
       } else if (typeof(input) === 'object' && input !== null) {
-        return castToObject(sample, input)
+        return objectHasSampleType(sample, input)
       } else {
-        return null
+        return false
       }
     case 'undefined':
       throw new Error('invalid sample: undefined')
@@ -32,12 +45,7 @@ export function cast<A>(sample: A, input: mixed): ?A {
   }
 }
 
-function unsafeCast<A, B>(a: A): B {
-  const r: any = a
-  return r
-}
-
-function castToObject<A>(sample: {} & A, input: {}): ?A {
+function objectHasSampleType<A>(sample: {} & A, input: {}): bool {
   let canCast = true
   _.forEach(sample, (value, key) => {
     if (input.hasOwnProperty(key)) {
@@ -49,9 +57,5 @@ function castToObject<A>(sample: {} & A, input: {}): ?A {
       canCast = false
     }
   })
-  if (canCast) {
-    return unsafeCast(input)
-  } else {
-    return null
-  }
+  return canCast
 }
