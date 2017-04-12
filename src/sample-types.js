@@ -32,8 +32,10 @@ function hasSampleType<A>(sample: A, input: mixed): bool {
     case 'object':
       if (sample === null) {
         throw new Error('invalid sample: null')
+      } else if (Array.isArray(sample)) {
+        return _arrayHasSampleType(sample, input)
       } else if (typeof(input) === 'object' && input !== null) {
-        return objectHasSampleType(sample, input)
+        return _objectHasSampleType(sample, input)
       } else {
         return false
       }
@@ -45,7 +47,7 @@ function hasSampleType<A>(sample: A, input: mixed): bool {
   }
 }
 
-function objectHasSampleType<A>(sample: {} & A, input: {}): bool {
+function _objectHasSampleType<A>(sample: {} & A, input: {}): bool {
   let canCast = true
   _.forEach(sample, (value, key) => {
     if (input.hasOwnProperty(key)) {
@@ -58,4 +60,20 @@ function objectHasSampleType<A>(sample: {} & A, input: {}): bool {
     }
   })
   return canCast
+}
+
+function _arrayHasSampleType<E>(sample: Array<E>, input: mixed): bool {
+  if (sample.length !== 1) {
+    throw new Error('invalid sample: array sample must have exactly 1 argument: ' + JSON.stringify(sample))
+  }
+  const elementSample = sample[0]
+  if (! Array.isArray(input)) {
+    return false
+  } else {
+    let canCast = true
+    input.forEach(element => {
+      canCast = canCast && hasSampleType(elementSample, element)
+    })
+    return canCast
+  }
 }

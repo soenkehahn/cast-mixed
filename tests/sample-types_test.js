@@ -99,9 +99,31 @@ describe('sample-types', () => {
 
     describe('arrays', () => {
 
-      it('allows to cast to arrays')
+      it('allows to cast to arrays', () => {
+        test(['foo'], ['bar'], ['bar'])
+      })
 
-      it('returns null in case one element is off')
+      it('rejects other types', () => {
+        test(['foo'], {'foo': 'bar'}, null)
+      })
+
+      it('returns null in case one element is off', () => {
+        test(['foo'], ['foo', 4, 'bar'], null)
+      })
+
+      describe('invalid array samples', () => {
+
+        it('disallows sample-arrays with no elements', () => {
+          const f = () => cast([], [])
+          expect(f).to.throw(/^invalid sample: array sample must have exactly 1 argument: \[\]$/)
+        })
+
+        it('disallows sample-arrays with more than one element', () => {
+          const f = () => cast(['foo', 'bar'], ['foo'])
+          expect(f).to.throw(/^invalid sample: array sample must have exactly 1 argument: \["foo","bar"\]$/)
+        })
+
+      })
 
     })
 
