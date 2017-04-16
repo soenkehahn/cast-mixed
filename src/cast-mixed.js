@@ -6,11 +6,11 @@ export class Spec<Sample> {
 
   sample: Sample
 
-  conformsToSample: mixed => bool
+  conformsToSpec: mixed => bool
 
-  constructor(sample: Sample, conformsToSample: mixed => bool) {
+  constructor(sample: Sample, conformsToSpec: mixed => bool) {
     this.sample = sample,
-    this.conformsToSample = conformsToSample
+    this.conformsToSpec = conformsToSpec
   }
 }
 
@@ -19,7 +19,7 @@ function getSample<Sample>(spec: Spec<Sample>): Sample {
 }
 
 export function cast<A>(spec: Spec<A>, input: mixed): ?A {
-  if (spec.conformsToSample(input)) {
+  if (spec.conformsToSpec(input)) {
     return unsafeCast(input)
   } else {
     return null
@@ -59,7 +59,7 @@ export function object<A, O: { [string]: Spec<A>}>(object: O): Spec<$ObjMap<O, t
         const obj: {} = mixed
         _.forEach(object, (valueSpec, key) => {
           if (obj.hasOwnProperty(key)) {
-            canCast = canCast && valueSpec.conformsToSample(obj[key])
+            canCast = canCast && valueSpec.conformsToSpec(obj[key])
           } else {
             canCast = false
           }
@@ -77,7 +77,7 @@ export function array<A>(elementSpec: Spec<A>): Spec<Array<A>> {
     if (Array.isArray(mixed)) {
       let canCast = true
       mixed.forEach(element => {
-        canCast = canCast && elementSpec.conformsToSample(element)
+        canCast = canCast && elementSpec.conformsToSpec(element)
       })
       return canCast
     } else {
@@ -88,15 +88,15 @@ export function array<A>(elementSpec: Spec<A>): Spec<Array<A>> {
 
 export function union<A, B>(a: Spec<A>, b: Spec<B>): Spec<A | B> {
   return new Spec(a.sample, mixed => {
-    return a.conformsToSample(mixed)
-      || b.conformsToSample(mixed)
+    return a.conformsToSpec(mixed)
+      || b.conformsToSpec(mixed)
   })
 }
 
 export function union3<A, B, C>(a: Spec<A>, b: Spec<B>, c: Spec<C>): Spec<A | B | C> {
   return new Spec(a.sample, mixed => {
-    return a.conformsToSample(mixed)
-      || b.conformsToSample(mixed)
-      || c.conformsToSample(mixed)
+    return a.conformsToSpec(mixed)
+      || b.conformsToSpec(mixed)
+      || c.conformsToSpec(mixed)
   })
 }

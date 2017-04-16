@@ -3,14 +3,14 @@
 import {describe, it} from 'mocha'
 import {expect} from 'chai'
 
-import {Spec, cast, number, string, boolean, object, array, union, union3} from '../src/sample-types'
+import {Spec, cast, number, string, boolean, object, array, union, union3} from '../src/cast-mixed'
 
-function test<A>(sample: Spec<A>, input: mixed, expected: ?A) {
-  const result = cast(sample, input)
+function test<A>(spec: Spec<A>, input: mixed, expected: ?A) {
+  const result = cast(spec, input)
   expect(result).to.eql(expected)
 }
 
-describe('sample-types', () => {
+describe('cast-mixed', () => {
   describe('cast', () => {
 
     it('provides static type information to flow', () => {
@@ -82,7 +82,7 @@ describe('sample-types', () => {
 
       })
 
-      it('allows more fields than in the sample', () => {
+      it('allows more fields than in the spec', () => {
         test(object({foo: number}), {foo: 5, bar: 6}, {foo: 5, bar: 6})
       })
 

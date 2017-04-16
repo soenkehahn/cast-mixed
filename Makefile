@@ -1,8 +1,22 @@
-test: flow.phony build/tests/sample-types_test.js build/src/sample-types.js
-	mocha build/tests/sample-types_test.js --color
+dist: setup.phony test.phony dist/cast-mixed.js
+
+test.phony: flow.phony build/tests/cast-mixed_test.js build/src/cast-mixed.js
+	mocha build/tests/cast-mixed_test.js --color
 
 build/%.js: %.js
 	babel --out-dir build $<
 
 flow.phony:
 	flow
+
+setup.phony:
+	yarn install
+
+dist/%.js: src/%.js
+	babel --no-babelrc --out-dir dist $< \
+		--plugins transform-flow-comments
+	mv dist/src/$*.js dist
+	rmdir dist/src
+
+clean:
+	rm -rf build dist
