@@ -1,7 +1,5 @@
 // @flow
 
-import _ from 'lodash'
-
 export class Spec<Sample> {
 
   sample: Sample
@@ -57,7 +55,8 @@ export function object<A, O: { [string]: Spec<A>}>(object: O): Spec<$ObjMap<O, t
       } else {
         let canCast = true
         const obj: {} = mixed
-        _.forEach(object, (valueSpec, key) => {
+        Object.keys(object).forEach(key => {
+          const valueSpec = object[key]
           if (obj.hasOwnProperty(key)) {
             canCast = canCast && valueSpec.conformsToSpec(obj[key])
           } else {
