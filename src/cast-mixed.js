@@ -53,17 +53,20 @@ export function object<A, O: { [string]: Spec<A>}>(object: O): Spec<$ObjMap<O, t
       if (mixed === null) {
         return false
       } else {
-        let canCast = true
         const obj: {} = mixed
-        Object.keys(object).forEach(key => {
+        const keys = Object.keys(object)
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
           const valueSpec = object[key]
           if (obj.hasOwnProperty(key)) {
-            canCast = canCast && valueSpec.conformsToSpec(obj[key])
+            if (!valueSpec.conformsToSpec(obj[key])) {
+              return false
+            }
           } else {
-            canCast = false
+            return false
           }
-        })
-        return canCast
+        }
+        return true
       }
     } else {
       return false
