@@ -86,16 +86,7 @@ describe('sample-types', () => {
         test(object({foo: number}), {foo: 5, bar: 6}, {foo: 5, bar: 6})
       })
 
-      it('allows optional fields')
-
-      it('keeps additional fields in the object')
-
-      it('allows refinement of object types in multiple steps')
-
-      it('returns an object that is referentially equal to the input')
     })
-
-    it('classes')
 
     describe('arrays', () => {
 
@@ -134,8 +125,6 @@ describe('sample-types', () => {
       })
 
     })
-
-    it('allows nullable types')
 
   })
 
