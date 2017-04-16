@@ -4,3 +4,5 @@ node_js:
 
 script:
   - make
+
+cache: yarn
