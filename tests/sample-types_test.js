@@ -13,6 +13,14 @@ function test<A>(sample: Spec<A>, input: mixed, expected: ?A) {
 describe('sample-types', () => {
   describe('cast', () => {
 
+    it('provides static type information to flow', () => {
+      const mixed: mixed = 5
+      const result = cast(object({foo: string}), mixed)
+      if (result) {
+        (result.foo: string)
+      }
+    })
+
     describe('numbers', () => {
 
       it('allows to cast', () => {
