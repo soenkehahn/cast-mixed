@@ -3,44 +3,24 @@
 import {describe, it} from 'mocha'
 import {expect} from 'chai'
 
-import {cast} from '../src/sample-types'
+import {Spec, cast, number, string, boolean, object, array, union, union3} from '../src/sample-types'
 
-function test<A>(sample: A, input: mixed, expected: ?A) {
+function test<A>(sample: Spec<A>, input: mixed, expected: ?A) {
   const result = cast(sample, input)
   expect(result).to.eql(expected)
 }
 
-
 describe('sample-types', () => {
   describe('cast', () => {
-
-    describe('invalid samples', () => {
-
-      it('throws an exception in case of invalid samples', () => {
-        const f = () => cast(() => {}, 5)
-        expect(f).to.throw(/^invalid sample: \(\) => {}$/)
-      })
-
-      it("doesn't allow null as samples", () => {
-        const f = () => cast(null, null)
-        expect(f).to.throw(/^invalid sample: null$/)
-      })
-
-      it("doesn't allow undefined as samples", () => {
-        const f = () => cast(undefined, undefined)
-        expect(f).to.throw(/^invalid sample: undefined$/)
-      })
-
-    })
 
     describe('numbers', () => {
 
       it('allows to cast', () => {
-        test(42, 5, 5)
+        test(number, 5, 5)
       })
 
       it('rejects other types', () => {
-        test(42, {foo: 5}, null)
+        test(number, {foo: 5}, null)
       })
 
     })
@@ -48,42 +28,54 @@ describe('sample-types', () => {
     describe('strings', () => {
 
       it('allows to cast', () => {
-        test('foo', 'bar', 'bar')
+        test(string, 'bar', 'bar')
       })
 
       it('rejects other types', () => {
-        test('foo', 5, null)
+        test(string, 5, null)
+      })
+
+    })
+
+    describe('booleans', () => {
+
+      it('allows to cast', () => {
+        test(boolean, true, true)
+      })
+
+      it('rejects other types', () => {
+        test(boolean, 5, null)
       })
 
     })
 
     describe('objects', () => {
       it('allows to cast', () => {
-        test({foo: 42}, {foo: 5}, {foo: 5})
+        test(object({foo: number}), {foo: 5}, {foo: 5})
       })
 
       it('rejects other types', () => {
-        test({foo: 42}, 'foo', null)
+        test(object({foo: number}), 'foo', null)
       })
 
       describe('recursively checks fields', () => {
 
         it('allows to cast field values', () => {
-          test({foo: {bar: 42}}, {foo: {bar: 5}}, {foo: {bar: 5}})
+          test(object({foo: object({bar: number})}), {foo: {bar: 5}}, {foo: {bar: 5}})
         })
 
         it('rejects other types in field values', () => {
-          test({foo: {bar: 42}}, {foo: {bar: 'foo'}}, null)
+          test(object({foo: object({bar: number})}), {foo: {bar: 'foo'}}, null)
         })
 
         it('rejects objects with missing fields', () => {
-          test({foo: 42, bar: 42}, {foo: 5}, null)
+          test(object({foo: number, bar: number}), {foo: 5}, null)
         })
 
       })
 
       it('allows more fields than in the sample', () => {
-        test({foo: 42}, {foo: 5, bar: 6}, {foo: 5, bar: 6})
+        test(object({foo: number}), {foo: 5, bar: 6}, {foo: 5, bar: 6})
       })
 
       it('allows optional fields')
@@ -100,40 +92,43 @@ describe('sample-types', () => {
     describe('arrays', () => {
 
       it('allows to cast to arrays', () => {
-        test(['foo'], ['bar'], ['bar'])
+        test(array(string), ['bar'], ['bar'])
       })
 
       it('rejects other types', () => {
-        test(['foo'], {'foo': 'bar'}, null)
+        test(array(string), {'foo': 'bar'}, null)
       })
 
       it('returns null in case one element is off', () => {
-        test(['foo'], ['foo', 4, 'bar'], null)
-      })
-
-      describe('invalid array samples', () => {
-
-        it('disallows sample-arrays with no elements', () => {
-          const f = () => cast([], [])
-          expect(f).to.throw(/^invalid sample: array sample must have exactly 1 argument: \[\]$/)
-        })
-
-        it('disallows sample-arrays with more than one element', () => {
-          const f = () => cast(['foo', 'bar'], ['foo'])
-          expect(f).to.throw(/^invalid sample: array sample must have exactly 1 argument: \["foo","bar"\]$/)
-        })
-
+        test(array(string), ['foo', 4, 'bar'], null)
       })
 
     })
 
     describe('unions', () => {
 
-      it('allows to specify unions')
+      it('allows to cast to the first type', () => {
+        test(union(number, string), 5, 5)
+      })
+
+      it('allows to cast to the second type', () => {
+        test(union(number, string), 'foo', 'foo')
+      })
+
+      it('rejects other types', () => {
+        test(union(number, string), {foo: 5}, null)
+      })
+
+      it('works for three types', () => {
+        test(union3(number, string, array(number)), 5, 5)
+        test(union3(number, string, array(number)), 'foo', 'foo')
+        test(union3(number, string, array(number)), [1, 2, 3], [1, 2, 3])
+      })
 
     })
 
     it('allows nullable types')
 
   })
+
 })
