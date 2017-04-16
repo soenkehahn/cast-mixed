@@ -13,5 +13,13 @@
   },
   "dependencies": {},
   "main": "dist/cast-mixed.js",
-  "prepublish": "make"
+  "prepublish": "make",
+  "files": [
+    "dist/*.js",
+    "Makefile",
+    "package.json",
+    "src/*.js",
+    "tests/*.js",
+    "yarn.lock"
+  ]
 }
