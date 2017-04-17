@@ -1,3 +1,5 @@
+export PATH := ./node_modules/.bin:$(PATH)
+
 dist: setup.phony test.phony dist/cast-mixed.js
 
 test.phony: flow.phony build/tests/cast-mixed_test.js build/src/cast-mixed.js
