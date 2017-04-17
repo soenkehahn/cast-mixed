@@ -1,10 +1,10 @@
 {
   "name": "cast-mixed",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-amd": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-plugin-transform-flow-comments": "^6.22.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "chai": "^3.5.0",
     "flow-bin": "^0.44.0",
