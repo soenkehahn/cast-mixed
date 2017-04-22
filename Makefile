@@ -15,8 +15,7 @@ setup.phony:
 	yarn install
 
 dist/%.js: src/%.js
-	babel --no-babelrc --out-dir dist $< \
-		--plugins transform-flow-strip-types,transform-es2015-modules-amd
+	babel --out-dir dist $<
 	mv dist/src/$*.js dist
 	rmdir dist/src
 
