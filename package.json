@@ -1,6 +1,6 @@
 {
   "name": "cast-mixed",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-es2015-modules-amd": "^6.24.1",
@@ -16,6 +16,7 @@
   "prepublish": "make",
   "files": [
     "dist/*.js",
+    "dist/*.js.flow",
     "Makefile",
     "package.json",
     "src/*.js",
