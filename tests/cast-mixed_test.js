@@ -15,7 +15,7 @@ describe('cast-mixed', () => {
 
     it('provides static type information to flow', () => {
       const mixed: mixed = 5
-      const result = cast(object({foo: string}), mixed)
+      const result = cast(object({foo: string, bar: number}), mixed)
       if (result) {
         (result.foo: string)
       }

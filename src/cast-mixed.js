@@ -43,7 +43,7 @@ export const boolean: Spec<boolean> = new Spec(true, mixed => {
   return (typeof(mixed) === 'boolean')
 })
 
-export function object<A, O: { [string]: Spec<A>}>(object: O): Spec<$ObjMap<O, typeof(getSample)>> {
+export function object<O: {[string]: Spec<*>}>(object: O): Spec<$ObjMap<O, typeof(getSample)>> {
   const result = {}
   Object.keys(object).forEach(key => {
     result[key] = getSample(object[key])
